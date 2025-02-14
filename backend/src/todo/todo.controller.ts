@@ -5,9 +5,13 @@ import {
   Post,
   HttpException,
   HttpStatus,
+  Patch,
+  Delete,
+  Param,
 } from '@nestjs/common';
 import { TodoService } from './todo.service';
 import { CreateTodoDto } from './dto/create-todo.dto';
+import { UpdateTodoDto } from './dto/update-todo.dto';
 
 @Controller('todos')
 export class TodoController {
@@ -26,8 +30,28 @@ export class TodoController {
   @Post()
   async createTODO(@Body() todo: CreateTodoDto) {
     try {
-      const newTodo = await this.todoService.createTODO(todo);
+      await this.todoService.createTODO(todo);
       return { message: 'Created Successfully', status: 201 };
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  @Patch()
+  async updateTODO(@Body() todo: UpdateTodoDto) {
+    try {
+      await this.todoService.updateTodo(todo);
+      return { message: 'Updated Successfully', status: 201 };
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  @Delete(':id') //lazmi h ye agr koi be chz params me sy a rhe h
+  async deleteTODO(@Param('id') id: string) {
+    try {
+      await this.todoService.deleteTodo(id);
+      return { message: 'Updated Successfully', status: 200 };
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
     }

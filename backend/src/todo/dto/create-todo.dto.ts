@@ -1,3 +1,4 @@
 export class CreateTodoDto {
-  todo: string;
+  title: string;
+  todoName: string;
 }

@@ -9,9 +9,21 @@ export class TodoService {
 
   async getAllTodos() {
     try {
-      return await this.prisma.todo.findMany();
+      return await this.prisma.todo.findMany({
+        where: { isDeleted: false },
+      });
     } catch (error) {
       throw new InternalServerErrorException('Error fetching todos');
+    }
+  }
+
+  async getTodobyID(id: string) {
+    try {
+      return await this.prisma.todo.findFirst({
+        where: { id },
+      });
+    } catch (error) {
+      throw new InternalServerErrorException('Error fetching todo');
     }
   }
 
@@ -21,6 +33,7 @@ export class TodoService {
         data: {
           title: todoData.title,
           todoName: todoData.todoName,
+          userID: '',
         },
       });
     } catch (error) {

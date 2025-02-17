@@ -21,7 +21,17 @@ export class TodoController {
   async getAllTodos() {
     try {
       const todos = await this.todoService.getAllTodos();
-      return { success: true, data: todos };
+      return { success: true, data: todos, status: 200 };
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  @Get(':id')
+  async getTodobyID(@Param('id') id: string) {
+    try {
+      await this.getTodobyID(id);
+      return { message: 'fetched Successfully', status: 200 };
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
     }
